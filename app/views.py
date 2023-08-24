@@ -12,13 +12,11 @@ def home(request):
     search_query = request.GET.get('search')
     if search_query:
        try:
-        with connection.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM app_watch WHERE brand LIKE '%{search_query}%'")
-                filtered_watches = cursor.fetchall()
-                for alkio in filtered_watches:
-                    items = {"id": alkio[0], "brand": alkio[1], "model": alkio[2]}
-                    results.append(items)
-                context['filtered_watches'] = results
+        filtered_watches = Watch.objects.filter(brand__icontains=search_query)
+        for i in filtered_watches:
+            items = {"id": i.id, "brand": i.brand, "model": i.model}
+            results.append(items)
+        context['filtered_watches'] = results
        except:
            error_message = "There was an error."
            context['error_message'] = error_message
@@ -27,19 +25,21 @@ def home(request):
     return render(request, "home.html", context)
 
 def login(request):
+    results = []
     if request.method == 'POST':
         user = request.POST.get('username')
         password = request.POST.get('password')
         
         try:
-            with connection.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM app_user WHERE username = '{user}'")
-                row = cursor.fetchone()
+            info = User.objects.filter(username=user)
+            for i in info:
+                results.append(i.username)
+                results.append(i.password)
         except:
             error_message = "There was an error."
             return render(request, "login.html", {'error_message': error_message})
         
-        if row and row[2] == password and row[1] == user:
+        if info and results[0] == user and results[1] == password:
             request.session['username'] = user
             return redirect('home')
         else:
@@ -67,8 +67,7 @@ def handle_description(request, id):
         description = request.POST.get('description')
  
         try:
-            with connection.cursor() as cursor:
-                cursor.execute(f"UPDATE app_watch SET description = '{description}' WHERE id = '{id}'")
+            Watch.objects.filter(pk=id).update(description=description)
             return redirect('details', id=id)
         except:
             error_message = "There was an error."
