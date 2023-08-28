@@ -16,20 +16,20 @@
           <a class="nav-link" href="/">Home</a>
         </li>
         <li class="nav-item mr-3"> 
-          <a class="nav-link" href="/watches">Watches</a>
+          <a class="nav-link" href="{% url 'watches' %}">Watches</a>
         </li>
-        {% if request.session.username %}
+        {% if user.is_authenticated %}
         <li class="nav-item mr-3">
-          <a class="nav-link" href="/logout">Logout</a>
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
         {% else %}
         <li class="nav-item mr-3">
-          <a class="nav-link" href="/login">Login</a>
+          <a class="nav-link" href="/login_user">Login</a>
         </li>
         {% endif %}
       </ul>
-      {% if is_authenticated %}
-        <p class="navbar-text ml-auto">Logged in as {{ request.session.username }}</p>
+      {% if user.is_authenticated %}
+        <p class="navbar-text ml-auto">Logged in as {{ user }}</p>
       {% endif %}
     </nav>
     {% if messages %}

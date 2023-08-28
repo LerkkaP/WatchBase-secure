@@ -4,7 +4,7 @@
 <div class="container mt-4">
   <h1>Watches</h1>
 
-  {% if is_authenticated %}
+  {% if user.is_authenticated %}
   <form method="POST" action="{% url 'add_watch' %}" class="mb-3">{% csrf_token %}
     <div class="form-group">
       <label for="brand">Brand</label>
