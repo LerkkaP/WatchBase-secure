@@ -3,7 +3,7 @@
 <div class="container mt-4">
   <h1>{{ watch.brand }} {{ watch.model }}</h1>
 
-  <!--{% if not request.session.username %}
+  {% if not user.is_authenticated %}
     {% if watch.description %}
       <p>{{ watch.description }}</p>
     {% else %}
@@ -11,15 +11,15 @@
     {% endif %}
   {% endif %}
 
-  {% if request.session.username and watch.added_by.username != request.session.username %}
+  {% if user.is_authenticated and watch.added_by != user %}
     {% if watch.description %}
       <p>{{ watch.description }}</p>
     {% else %}
       <p>No description added</p>
     {% endif %}
-  {% endif %} -->
+  {% endif %}
 
-  {% if watch.added_by.username == user %}
+  {% if watch.added_by == user %}
     {% if watch.description %}
       <div class="mt-3">
         <p>{{ watch.description }}</p>

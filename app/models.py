@@ -9,3 +9,6 @@ class Watch(models.Model):
     model = models.CharField(max_length=200, null=True)
     description = models.TextField(null=True)
     added_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1) 
+
+    def __str__(self):
+        return self.brand
